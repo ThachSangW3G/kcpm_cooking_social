@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Cooking Social</string>
+    <string name="facebook_app_id">1446845852838959</string>
+    <string name="fb_login_protocol_scheme">fbb1f240a0a70af6d6da1ea346c3c01064</string>
+    <string name="facebook_client_token">6355a4bc5f33451eab408cc14f6b6318</string>
+</resources>

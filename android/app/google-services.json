@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "696564798855",
+    "project_id": "kcpmcookingsocial",
+    "storage_bucket": "kcpmcookingsocial.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:696564798855:android:5a583161b3fbc522606f22",
+        "android_client_info": {
+          "package_name": "com.example.kcpm"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCY0LmnOjKpxaFHIlyZOa6aS93toZKWFGk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
