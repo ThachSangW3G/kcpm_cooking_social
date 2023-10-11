@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kcpm/services/auth.dart';
 
 import '../../constants/app_colors.dart';
+import '../../routes/app_routes.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -141,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     GestureDetector(
                       onTap: () async {
-                        //Navigator.pushNamed(context, RouteGenerator.sign_up_email);
+                        Navigator.pushNamed(context, RouteGenerator.sign_up_email);
                       },
                       child: Container(
                         width: double.infinity,
