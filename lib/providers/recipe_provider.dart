@@ -26,6 +26,10 @@ class RecipeProvider extends ChangeNotifier{
     return recipes.snapshots().map((snapshot) => _recipeSearchListFromSnapshot(snapshot, searchText));
   }
 
+  Stream<List<Recipe>> getRecipeByIdUser(String idUser){
+    return recipes.where('uidUser', isEqualTo: idUser).snapshots().map(_recipeListFromSnapshot);
+  }
+
   Future<Recipe> getRecipe(String idRecipe) async {
     return await recipes.doc(idRecipe).get().then(
             (DocumentSnapshot doc){
@@ -60,5 +64,91 @@ class RecipeProvider extends ChangeNotifier{
   Future<void> init() async {
     _recipes = await getAllRecipes();
   }
+
+  String _sort = 'relevancy';
+
+  String get sort => _sort;
+
+  setSort(String strSort) {
+    _sort = strSort;
+    notifyListeners();
+  }
+
+  List<Recipe> filterRecipe = [];
+  List<String> filterKey = [];
+
+  addFilterKey(String idCategory) {
+    filterKey.add(idCategory);
+    notifyListeners();
+  }
+
+  removeFilterKey(String idCategory) {
+    filterKey.remove(idCategory);
+    notifyListeners();
+  }
+
+  eventFilterKey(String idCategory) {
+    if (!filterKey.contains(idCategory)) {
+      addFilterKey(idCategory);
+    } else {
+      removeFilterKey(idCategory);
+    }
+
+    print(filterKey);
+
+    notifyListeners();
+  }
+
+  bool containsFilter(String idCategory) {
+    if (filterKey.contains(idCategory)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  List<Recipe> _recipeSortAndFilter(QuerySnapshot snapshot){
+
+    List<Recipe> listRecipe = snapshot.docs.map((doc) => Recipe.fromJson(doc.data() as Map<String, dynamic>)).toList();
+
+    List<Recipe> listRecipeFilter = [];
+
+    if (filterKey.isEmpty) {
+      listRecipeFilter = listRecipe;
+      print(filterKey);
+
+    } else {
+      listRecipeFilter = listRecipe.where((feature) {
+        return filterKey.contains(feature.category);
+      }).toList();
+      //print(filterKey);
+    }
+
+
+
+    switch (_sort) {
+      case 'relevancy':
+        //listRecipeFilter = snapshot.docs.map((doc) => Recipe.fromJson(doc.data() as Map<String, dynamic>)).toList();
+        break;
+      case 'popular':
+        listRecipeFilter.sort((a, b) => b.numberLike.compareTo(a.numberLike));
+        break;
+      case 'commented':
+        listRecipeFilter.sort((a, b) => b.numberReView.compareTo(a.numberReView));
+        break;
+      case 'preparation_time':
+        listRecipeFilter.sort((a, b) => b.cookTime.compareTo(a.cookTime));
+    }
+
+
+    return listRecipeFilter;
+  }
+
+
+  Stream<List<Recipe>> getRecipeSortAndFilter() {
+    return recipes.snapshots().map(_recipeSortAndFilter);
+  }
+
+
 
 }

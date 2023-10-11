@@ -4,12 +4,15 @@ import 'package:kcpm/screens/authentication/sign_up_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../models/recipe.dart';
+import '../screens/account/account_person_screen.dart';
 import '../screens/account/account_screen.dart';
+import '../screens/account/edit_profile_screen.dart';
 import '../screens/account/liked_recipe_screen.dart';
 import '../screens/account/notification_screen.dart';
 import '../screens/account/setting_screen.dart';
 import '../screens/authentication/login_screen.dart';
 import '../screens/bottom_navigation/bottom_navigation.dart';
+import '../screens/comunity/community_screen.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/recipe/detail_recipe.dart';
 import '../screens/recipe/recipe_add_screen.dart';
@@ -49,12 +52,12 @@ class RouteGenerator {
       //     duration: const Duration(milliseconds: 400),
       //   );
 
-      // case community:
-      //   return PageTransition(
-      //     child: const SafeArea(child: SafeArea(child: CommunityScreen())),
-      //     type: PageTransitionType.fade,
-      //     duration: const Duration(milliseconds: 400),
-      //   );
+      case community:
+        return PageTransition(
+          child: const SafeArea(child: SafeArea(child: CommunityScreen())),
+          type: PageTransitionType.fade,
+          duration: const Duration(milliseconds: 400),
+        );
 
       case bottom_navigation:
         return PageTransition(
@@ -131,28 +134,28 @@ class RouteGenerator {
       //     type: PageTransitionType.rightToLeft,
       //     duration: const Duration(milliseconds: 400),
       //   );
-      // case accountpersonScreen:
-      //   String idUser = args as String;
-      //   return PageTransition(
-      //     child: SafeArea(
-      //         child: SafeArea(
-      //             child: AccountPerSonScreen(
-      //               idUser: idUser,
-      //             ))),
-      //     type: PageTransitionType.rightToLeft,
-      //     duration: const Duration(milliseconds: 400),
-      //   );
-      // case editprofileScreen:
-      //   String idUser = args as String;
-      //   return PageTransition(
-      //     child: SafeArea(
-      //         child: SafeArea(
-      //             child: EditProfileScreen(
-      //               idUser: idUser,
-      //             ))),
-      //     type: PageTransitionType.rightToLeft,
-      //     duration: const Duration(milliseconds: 400),
-      //   );
+      case accountpersonScreen:
+        String idUser = args as String;
+        return PageTransition(
+          child: SafeArea(
+              child: SafeArea(
+                  child: AccountPerSonScreen(
+                    idUser: idUser,
+                  ))),
+          type: PageTransitionType.rightToLeft,
+          duration: const Duration(milliseconds: 400),
+        );
+      case editprofileScreen:
+        String idUser = args as String;
+        return PageTransition(
+          child: SafeArea(
+              child: SafeArea(
+                  child: EditProfileScreen(
+                    idUser: idUser,
+                  ))),
+          type: PageTransitionType.rightToLeft,
+          duration: const Duration(milliseconds: 400),
+        );
       case likedrecipeScreen:
         return PageTransition(
           child: const SafeArea(child: SafeArea(child: LikedRecipeScreen())),

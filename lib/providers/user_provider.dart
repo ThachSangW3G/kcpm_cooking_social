@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:kcpm/remote/user_firebase.dart';
 import 'package:kcpm/services/auth.dart';
 
 import '../models/user.dart';
 
-class UserProvider{
+class UserProvider extends ChangeNotifier{
 
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
@@ -24,6 +25,10 @@ class UserProvider{
         }
     );
 
+  }
+
+  Future<void> updateUser(UserInformation userInformation) {
+    return users.doc(userInformation.uid).update(userInformation.toJson()).then((value) => print(''));
   }
 
 

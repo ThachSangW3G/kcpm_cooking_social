@@ -11,10 +11,12 @@ import 'package:kcpm/providers/add_recipe_provider/spice_provider.dart';
 import 'package:kcpm/providers/add_recipe_provider/steps_provider.dart';
 import 'package:kcpm/providers/calendar_provider.dart';
 import 'package:kcpm/providers/category_provider.dart';
+import 'package:kcpm/providers/like_provider.dart';
 import 'package:kcpm/providers/like_review_provider.dart';
 import 'package:kcpm/providers/recipe_provider.dart';
 import 'package:kcpm/providers/review_provider.dart';
 import 'package:kcpm/providers/theme_provider.dart';
+import 'package:kcpm/providers/user_provider.dart';
 import 'package:kcpm/routes/app_routes.dart';
 import 'package:kcpm/screens/authentication/login_screen.dart';
 import 'package:kcpm/screens/authentication/sign_up_screen.dart';
@@ -41,6 +43,8 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => IntroProvider()),
         ChangeNotifierProvider(create: (_) => CategoryProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => LikeProvider()),
       ],
       child: const MyApp())
   );
