@@ -4,8 +4,68 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kcpm/models/user.dart';
 import 'package:kcpm/remote/user_firebase.dart';
 
+abstract class FirebaseAuthClientException implements Exception {
+  /// {@macro firebase_auth_client_exception}
+  const FirebaseAuthClientException(this.error);
+
+  /// The error which was caught.
+  final Object error;
+}
+
+/// {@template firebase_sign_in_failure}
+/// Thrown during the sign in process if a failure occurs.
+/// {@endtemplate}
+class FirebaseSignInFailure extends FirebaseAuthClientException {
+  /// {@macro firebase_sign_in_failure}
+  const FirebaseSignInFailure(super.error);
+
+  /// Construct error messages from the given code.
+  factory FirebaseSignInFailure.fromCode(String code) {
+    switch (code) {
+      case 'invalid-email':
+        return const FirebaseSignInFailure(
+          'Email address is invalid.',
+        );
+      case 'user-disabled':
+        return const FirebaseSignInFailure(
+          'Your account is disabled.',
+        );
+      case 'user-not-found':
+        return const FirebaseSignInFailure(
+          'Unable to find your account.',
+        );
+      case 'wrong-password':
+        return const FirebaseSignInFailure(
+          'You have entered the wrong password.',
+        );
+      default:
+        return const FirebaseSignInFailure(
+          'An unknown error occurred.',
+        );
+    }
+  }
+
+  @override
+  String toString() => error.toString();
+}
+
+/// {@template firebase_sign_out_failure}
+/// Thrown during the sign out process if a failure occurs.
+/// {@endtemplate}
+class FirebaseSignOutFailure extends FirebaseAuthClientException {
+  /// {@macro firebase_sign_out_failure}
+  const FirebaseSignOutFailure(super.error);
+}
+
 class AuthService{
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth;
+
+
+  const AuthService({
+    required FirebaseAuth auth,
+
+  })  : _auth = auth;
+
 
   UserModel? _userFromFirebaseUser(User? user){
     return user != null ? UserModel(uid: user.uid) : null;
@@ -16,7 +76,8 @@ class AuthService{
   }
 
 
-  Future signInWithGoogle() async {
+  Future<bool> signInWithGoogle() async {
+
     try{
       final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
 
@@ -28,7 +89,7 @@ class AuthService{
           accessToken: gAuth.accessToken, idToken: gAuth.idToken);
 
       // finally, lets sign in
-      UserCredential userCredential =  await FirebaseAuth.instance.signInWithCredential(credential);
+      UserCredential userCredential =  await _auth.signInWithCredential(credential);
       User user = userCredential.user!;
 
 
@@ -44,10 +105,11 @@ class AuthService{
         await UserFirebaseService().setDataUse(userInformation);
       }
 
-      return _userFromFirebaseUser(user);
+      _userFromFirebaseUser(user);
+      return true;
     }catch(e){
       print(e.toString());
-      return null;
+      return false;
     }
 
   }

@@ -190,7 +190,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       label: 'Logout',
                       onTap: () async {
                         try{
-                          AuthService().signOut();
+                          AuthService(auth: FirebaseAuth.instance).signOut();
                           Navigator.pop(context);
                         } catch(e) {
                           print(e.toString());

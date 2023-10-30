@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kcpm/services/auth.dart';
 
@@ -19,6 +20,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +140,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           loading = true;
                         });
 
-                        if(await AuthService().createWithEmailAndPassword(_emailController.text, _passwordController.text, _nameController.text)){
+                        if(await AuthService(auth: _auth).createWithEmailAndPassword(_emailController.text, _passwordController.text, _nameController.text)){
                           setState(() {
                             loading = false;
                           });

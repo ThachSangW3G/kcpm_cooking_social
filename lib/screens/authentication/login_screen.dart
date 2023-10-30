@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kcpm/services/auth.dart';
 
@@ -18,6 +19,8 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _obscureText = true;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     GestureDetector(
                       onTap: () async {
                         try{
-                          AuthService().signInWithEmailAndPassword(_emailController.text, _passwordController.text);
+                          AuthService(auth: _auth).signInWithEmailAndPassword(_emailController.text, _passwordController.text);
                         }catch (e) {
                           print(e.toString());
                         }
@@ -208,7 +211,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: GestureDetector(
                             onTap: () async {
                               try {
-                                AuthService().signInWithFacebook();
+                                AuthService(auth: _auth).signInWithFacebook();
                               } catch (e) {
                                 print(e.toString());
                                 return null;
@@ -270,7 +273,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: GestureDetector(
                             onTap: () async {
                               try {
-                                AuthService().signInWithGoogle();
+                                AuthService(auth: _auth).signInWithGoogle();
                               } catch (e) {
                                 print(e.toString());
                                 return null;
