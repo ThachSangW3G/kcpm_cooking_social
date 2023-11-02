@@ -97,7 +97,7 @@ class FeaturedCardSmallWidget extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          recipe.numberReView.toString(),
+                          recipe.numberReview.toString(),
                           style: const TextStyle(
                               fontFamily: 'CeraPro',
                               fontSize: 14,

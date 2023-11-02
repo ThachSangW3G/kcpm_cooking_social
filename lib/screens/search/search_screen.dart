@@ -1,4 +1,5 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kcpm/providers/recipe_provider.dart';
@@ -27,7 +28,7 @@ class _SearchRecipeScreenState extends State<SearchRecipeScreen> {
   Widget _buildSearch(){
       return
         StreamBuilder<List<Recipe>>(
-          stream: RecipeProvider().getSearchRecipe(searchText),
+          stream: RecipeProvider(firestore: FirebaseFirestore.instance).getSearchRecipe(searchText),
           builder: (context, snapshot) {
 
             if(snapshot.connectionState == ConnectionState.waiting){

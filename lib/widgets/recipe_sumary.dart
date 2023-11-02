@@ -102,7 +102,7 @@ class _RecipeSummaryState extends State<RecipeSummary> {
                           ),
                         ),
                         FutureBuilder<LikeModel>(
-                            future: LikeProvider().likeExists(recipe.key, uid!),
+                            future: LikeProvider().likeExists(recipe.id, uid!),
                             builder: (context, snapshot) {
                               final LikeModel? liked = snapshot.data;
 
@@ -111,7 +111,7 @@ class _RecipeSummaryState extends State<RecipeSummary> {
                                   if(liked == null){
                                     LikeModel likeModel = LikeModel(
                                         id: DateTime.now().toIso8601String(),
-                                        idRecipe: recipe.key,
+                                        idRecipe: recipe.id,
                                         idUser: FirebaseAuth.instance.currentUser!.uid,
                                         time: Timestamp.now()
                                     );
@@ -224,7 +224,7 @@ class _RecipeSummaryState extends State<RecipeSummary> {
                                               width: 10.0,
                                             ),
                                             Text(
-                                              recipe.numberReView.toString(),
+                                              recipe.numberReview.toString(),
                                               style: const TextStyle(
                                                   fontFamily: 'CeraPro',
                                                   color: AppColors.greyShuttle),
@@ -322,7 +322,7 @@ class _RecipeSummaryState extends State<RecipeSummary> {
                                             'Reviews (',
                                             style: kReviewLabelTextStyleBold,
                                           ),
-                                          Text(recipe.numberReView.toString(),
+                                          Text(recipe.numberReview.toString(),
                                               style: kReviewLabelTextStyleBold),
                                           const Text(
                                             ')',
@@ -350,7 +350,7 @@ class _RecipeSummaryState extends State<RecipeSummary> {
                                   ),
                                   FutureBuilder<List<Review>>(
                                       future: ReviewProvider()
-                                          .fetchReview(recipe.key),
+                                          .fetchReview(recipe.id),
                                       builder: (context, snapshotReview) {
                                         try {
                                           if (snapshotReview.hasError) {

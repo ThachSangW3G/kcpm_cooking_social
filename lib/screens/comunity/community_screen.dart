@@ -203,13 +203,13 @@ class _CommunityScreenState extends State<CommunityScreen> {
                                 Navigator.of(context).pushNamed(
                                   RouteGenerator.recipedetailScreen,
                                   arguments: {
-                                    'key': recipe.key,
+                                    'ìd': recipe.id,
                                     'uid': recipe.uidUser,
                                   },
                                 );
                               },
                               child: StreamBuilder<UserInformation>(
-                                stream: UserProvider().getUser(recipe.uidUser),
+                                stream: UserProvider(firestore: FirebaseFirestore.instance).getUser(recipe.uidUser),
                                 builder: (context, snapshot) {
 
                                   if (snapshot.connectionState == ConnectionState.waiting){
@@ -219,7 +219,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
                                   final userInformation = snapshot.data;
 
                                   return FutureBuilder<LikeModel>(
-                                    future: LikeProvider().likeExists(recipe.key, user.uid),
+                                    future: LikeProvider().likeExists(recipe.id, user.uid),
                                     builder: (context, snapshot){
 
                                       final LikeModel? liked = snapshot.data;
@@ -228,7 +228,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
                                         if(liked == null){
                                           LikeModel likeModel = LikeModel(
                                               id: DateTime.now().toIso8601String(),
-                                              idRecipe: recipe.key,
+                                              idRecipe: recipe.id,
                                               idUser: user.uid,
                                               time: Timestamp.now()
                                           );

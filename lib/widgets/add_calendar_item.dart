@@ -62,7 +62,7 @@ class _AddCalendarItemState extends State<AddCalendarItem> {
 
             final recipeCalendar = RecipeCalendar(
                 id: DateTime.now().toIso8601String(),
-                idRecipe: recipeProvider.listRecipe[selected!].key,
+                idRecipe: recipeProvider.listRecipe[selected!].id,
                 date: Timestamp.fromDate(calendarProvider.dateSelected),
                 meal: meal!,
                 idUser: FirebaseAuth.instance.currentUser!.uid

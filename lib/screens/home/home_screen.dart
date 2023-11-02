@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   children: [
                     StreamBuilder<UserInformation>(
-                      stream: UserProvider().getUser(FirebaseAuth.instance.currentUser!.uid),
+                      stream: UserProvider(firestore: FirebaseFirestore.instance).getUser(FirebaseAuth.instance.currentUser!.uid),
                       builder: (context, snapshot){
                         if (snapshot.hasData){
 
@@ -168,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
                     StreamBuilder<List<Recipe>>(
-                      stream: RecipeProvider().getRecipes(),
+                      stream: RecipeProvider(firestore: FirebaseFirestore.instance).getRecipes(),
                       builder: (context, snapshot) {
 
                         if(snapshot.hasError){
@@ -190,20 +190,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Navigator.of(context).pushNamed(
                                       RouteGenerator.recipedetailScreen,
                                       arguments: {
-                                        'key': recipe.key,
+                                        'id': recipe.id,
                                         'uid': recipe.uidUser,
                                       },
                                     );
                                   },
                                   child: StreamBuilder<UserInformation>(
-                                    stream: UserProvider().getUser(recipe.uidUser),
+                                    stream: UserProvider(firestore: FirebaseFirestore.instance).getUser(recipe.uidUser),
                                     builder: (context, snapshot) {
 
                                       final userInformation = snapshot.data;
 
                                       if (snapshot.hasData){
                                         return FutureBuilder<LikeModel>(
-                                            future: LikeProvider().likeExists(recipe.key, FirebaseAuth.instance.currentUser!.uid),
+                                            future: LikeProvider().likeExists(recipe.id, FirebaseAuth.instance.currentUser!.uid),
                                             builder: (context, snapshot){
                                               final LikeModel? liked = snapshot.data;
 
@@ -213,7 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   if(liked == null){
                                                     LikeModel likeModel = LikeModel(
                                                         id: DateTime.now().toIso8601String(),
-                                                        idRecipe: recipe.key,
+                                                        idRecipe: recipe.id,
                                                         idUser: FirebaseAuth.instance.currentUser!.uid,
                                                         time: Timestamp.now()
                                                     );

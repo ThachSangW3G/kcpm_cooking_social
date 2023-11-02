@@ -44,7 +44,7 @@ class LikeProvider extends ChangeNotifier{
   Future<void> updateRecipe(Recipe recipe){
     recipe.numberLike += 1;
     return firestore.collection('recipes')
-        .doc(recipe.key)
+        .doc(recipe.id)
         .update(recipe.toJson())
         .then((value) => print('recipe updated'));
 
@@ -72,7 +72,7 @@ class LikeProvider extends ChangeNotifier{
     List<Recipe> recipes = [];
 
     for(var liked in listLikeRecipe){
-      Recipe recipe = await RecipeProvider().getRecipe(liked.idRecipe);
+      Recipe recipe = await RecipeProvider(firestore: FirebaseFirestore.instance).getRecipe(liked.idRecipe);
 
       recipes.add(recipe);
     }

@@ -1,4 +1,5 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kcpm/providers/recipe_provider.dart';
@@ -23,7 +24,7 @@ class RecipeCalendarCard extends StatelessWidget {
       child: Column(
         children: [
           FutureBuilder<Recipe>(
-            future: RecipeProvider().getRecipe(recipeCalendar.idRecipe),
+            future: RecipeProvider(firestore: FirebaseFirestore.instance).getRecipe(recipeCalendar.idRecipe),
             builder: (context, snapshot){
               if (snapshot.connectionState == ConnectionState.waiting){
                 return const Center(

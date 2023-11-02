@@ -63,7 +63,7 @@ class _AccountPerSonScreenState extends State<AccountPerSonScreen>
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: StreamBuilder<UserInformation>(
-          stream: UserProvider().getUser(widget.idUser),
+          stream: UserProvider(firestore: FirebaseFirestore.instance).getUser(widget.idUser),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Container(
@@ -301,7 +301,7 @@ class _AccountPerSonScreenState extends State<AccountPerSonScreen>
 
                             const LineRow(),
                             StreamBuilder<List<Recipe>>(
-                                stream: RecipeProvider().getRecipeByIdUser(userInformation.uid),
+                                stream: RecipeProvider(firestore: FirebaseFirestore.instance).getRecipeByIdUser(userInformation.uid),
                                 builder: (context, snapshot) {
 
                                   if(snapshot.hasError){
@@ -323,20 +323,20 @@ class _AccountPerSonScreenState extends State<AccountPerSonScreen>
                                               Navigator.of(context).pushNamed(
                                                 RouteGenerator.recipedetailScreen,
                                                 arguments: {
-                                                  'key': recipe.key,
+                                                  'key': recipe.id,
                                                   'uid': recipe.uidUser,
                                                 },
                                               );
                                             },
                                             child: StreamBuilder<UserInformation>(
-                                                stream: UserProvider().getUser(recipe.uidUser),
+                                                stream: UserProvider(firestore: FirebaseFirestore.instance).getUser(recipe.uidUser),
                                                 builder: (context, snapshot) {
 
                                                   final userInformation = snapshot.data;
 
                                                   if (snapshot.hasData){
                                                     return FutureBuilder<LikeModel>(
-                                                        future: LikeProvider().likeExists(recipe.key, FirebaseAuth.instance.currentUser!.uid),
+                                                        future: LikeProvider().likeExists(recipe.id, FirebaseAuth.instance.currentUser!.uid),
                                                         builder: (context, snapshot){
                                                           final LikeModel? liked = snapshot.data;
 
@@ -346,7 +346,7 @@ class _AccountPerSonScreenState extends State<AccountPerSonScreen>
                                                               if(liked == null){
                                                                 LikeModel likeModel = LikeModel(
                                                                     id: DateTime.now().toIso8601String(),
-                                                                    idRecipe: recipe.key,
+                                                                    idRecipe: recipe.id,
                                                                     idUser: FirebaseAuth.instance.currentUser!.uid,
                                                                     time: Timestamp.now()
                                                                 );

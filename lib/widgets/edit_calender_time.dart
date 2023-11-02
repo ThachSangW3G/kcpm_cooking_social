@@ -1,4 +1,5 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kcpm/providers/recipe_provider.dart';
@@ -81,7 +82,7 @@ class _EditCalendarItemState extends State<EditCalendarItem> {
             }
 
             recipeCalendar.meal = meal!;
-            recipeCalendar.idRecipe = listRecipe![selected!].key;
+            recipeCalendar.idRecipe = listRecipe![selected!].id;
 
             calendarProvider.updateRecipeCalendar(recipeCalendar);
 
@@ -191,7 +192,7 @@ class _EditCalendarItemState extends State<EditCalendarItem> {
           ),
           Container(
             child: StreamBuilder<List<Recipe>>(
-              stream: RecipeProvider().getRecipes(),
+              stream: RecipeProvider(firestore: FirebaseFirestore.instance).getRecipes(),
               builder: (context, snapshot) {
 
                 if(snapshot.connectionState == ConnectionState.waiting){

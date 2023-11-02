@@ -1,5 +1,6 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kcpm/models/user.dart';
@@ -60,7 +61,7 @@ class _AccountScreenState extends State<AccountScreen> {
               child: Column(
                 children: [
                   StreamBuilder<UserInformation>(
-                      stream: UserProvider().getUser(user.uid),
+                      stream: UserProvider(firestore: FirebaseFirestore.instance).getUser(user.uid),
                       builder: ( context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.waiting) {
                           return const Center(

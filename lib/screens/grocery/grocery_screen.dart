@@ -1,4 +1,5 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kcpm/providers/grocery_provider.dart';
@@ -117,7 +118,7 @@ class _GroceryScreenState extends State<GroceryScreen> {
                       final listGrocery = snapshot.data;
                       return Column(
                           children: listGrocery!.map((grocery) => FutureBuilder<Recipe>(
-                            future: RecipeProvider().getRecipe(grocery.recipeId),
+                            future: RecipeProvider(firestore: FirebaseFirestore.instance).getRecipe(grocery.recipeId),
                             builder: (context, snapshot){
                               if(snapshot.connectionState == ConnectionState.waiting){
                                 return const Center(

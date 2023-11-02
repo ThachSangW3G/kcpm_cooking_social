@@ -3,8 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:kcpm/models/recipe.dart';
 
 class RecipeProvider extends ChangeNotifier{
-  CollectionReference recipes = FirebaseFirestore.instance.collection('recipes');
 
+  RecipeProvider({required this.firestore}){
+    init();
+  }
+
+  final FirebaseFirestore firestore;
 
   List<Recipe> _recipeListFromSnapshot(QuerySnapshot snapshot){
     return snapshot.docs.map((doc) => Recipe.fromJson(doc.data() as Map<String, dynamic>)).toList();
@@ -12,8 +16,9 @@ class RecipeProvider extends ChangeNotifier{
 
 
   Stream<List<Recipe>> getRecipes() {
-    return recipes.snapshots().map(_recipeListFromSnapshot);
+    return firestore.collection('recipes').snapshots().map(_recipeListFromSnapshot);
   }
+
 
 
   List<Recipe> _recipeSearchListFromSnapshot(QuerySnapshot snapshot, String searchText){
@@ -23,15 +28,15 @@ class RecipeProvider extends ChangeNotifier{
 
 
   Stream<List<Recipe>> getSearchRecipe(String searchText) {
-    return recipes.snapshots().map((snapshot) => _recipeSearchListFromSnapshot(snapshot, searchText));
+    return firestore.collection('recipes').snapshots().map((snapshot) => _recipeSearchListFromSnapshot(snapshot, searchText));
   }
 
   Stream<List<Recipe>> getRecipeByIdUser(String idUser){
-    return recipes.where('uidUser', isEqualTo: idUser).snapshots().map(_recipeListFromSnapshot);
+    return firestore.collection('recipes').where('uidUser', isEqualTo: idUser).snapshots().map(_recipeListFromSnapshot);
   }
 
   Future<Recipe> getRecipe(String idRecipe) async {
-    return await recipes.doc(idRecipe).get().then(
+    return await firestore.collection('recipes').doc(idRecipe).get().then(
             (DocumentSnapshot doc){
           final data = Recipe.fromJson(doc.data() as Map<String, dynamic>);
           return Future.value(data);
@@ -44,14 +49,14 @@ class RecipeProvider extends ChangeNotifier{
 
   List<Recipe> get listRecipe => _recipes;
 
-  RecipeProvider(){
-    init();
-    print('Sanggg');
-  }
+  // RecipeProvider(){
+  //   init();
+  //   print('Sanggg');
+  // }
 
   Future<List<Recipe>> getAllRecipes() async {
     List<Recipe> recipeList = [];
-    await recipes.get().then((QuerySnapshot querySnapshot) {
+    await firestore.collection('recipes').get().then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
         recipeList.add(Recipe.fromJson(doc.data() as Map<String, dynamic>));
         //print(recipeList.length);
@@ -134,7 +139,7 @@ class RecipeProvider extends ChangeNotifier{
         listRecipeFilter.sort((a, b) => b.numberLike.compareTo(a.numberLike));
         break;
       case 'commented':
-        listRecipeFilter.sort((a, b) => b.numberReView.compareTo(a.numberReView));
+        listRecipeFilter.sort((a, b) => b.numberReview.compareTo(a.numberReview));
         break;
       case 'preparation_time':
         listRecipeFilter.sort((a, b) => b.cookTime.compareTo(a.cookTime));
@@ -146,7 +151,7 @@ class RecipeProvider extends ChangeNotifier{
 
 
   Stream<List<Recipe>> getRecipeSortAndFilter() {
-    return recipes.snapshots().map(_recipeSortAndFilter);
+    return firestore.collection('recipes').snapshots().map(_recipeSortAndFilter);
   }
 
 

@@ -24,7 +24,7 @@ class _ReViewScreenState extends State<ReViewScreen> {
   String? _description;
   @override
   void initState() {
-    keyRecipe = widget.recipe.key;
+    keyRecipe = widget.recipe.id;
     //context.read<ReviewStateProvider>().fetchReview(keyRecipe!);
     super.initState();
   }

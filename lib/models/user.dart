@@ -13,6 +13,20 @@ class UserInformation{
 
   UserInformation({required this.uid, required this.avatar, required this.name, required this.email, required this.bio});
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is UserInformation &&
+              runtimeType == other.runtimeType &&
+              uid == other.uid &&
+              avatar == other.avatar &&
+              email == other.email &&
+              name == other.name &&
+              bio == other.bio;
+
+  @override
+  int get hashCode => uid.hashCode;
+
   factory UserInformation.fromJson(Map<String, dynamic> json){
     return UserInformation(
         uid: json['uid'] ?? "",
@@ -31,5 +45,7 @@ class UserInformation{
       'name': name,
       'bio': bio,
   };
+
+
 }
 }

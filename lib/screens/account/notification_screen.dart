@@ -1,4 +1,5 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:kcpm/providers/notification_provider.dart';
 
@@ -111,7 +112,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               arguments: dataNotification.idUserGuest);
                         }
                         else if(dataNotification.type == 'newReview'){
-                          final recipe = await RecipeProvider().getRecipe(dataNotification.idRecipe);
+                          final recipe = await RecipeProvider(firestore: FirebaseFirestore.instance).getRecipe(dataNotification.idRecipe);
                           Navigator.of(context).pushNamed(
                               RouteGenerator.reviewScreen,
                               arguments: recipe);

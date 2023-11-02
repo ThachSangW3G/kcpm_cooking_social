@@ -59,7 +59,7 @@ class _LikedRecipeScreenState extends State<LikedRecipeScreen> {
                     onTap: (){
                       Navigator.of(context).pushNamed(
                           RouteGenerator.recipedetailScreen,
-                          arguments: recipe.key);
+                          arguments: recipe.id);
                     },
                     child: RecipeItemUnPublishedWidget(
                       recipe: recipe,

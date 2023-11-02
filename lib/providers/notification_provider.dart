@@ -11,6 +11,7 @@ class NotificationProvider{
 
   CollectionReference notifications = FirebaseFirestore.instance.collection('notifications');
 
+
   Future<List<NotificationModel>> getListNotification() async {
     List<NotificationModel> notificationList = [];
     await notifications
@@ -61,13 +62,13 @@ class NotificationProvider{
     for(var notification in notifications){
 
       UserInformation userOwner =
-      UserProvider().getUser(notification.idUserOwner) as UserInformation ;
+      UserProvider(firestore: FirebaseFirestore.instance).getUser(notification.idUserOwner) as UserInformation ;
 
-      UserInformation userGuest = UserProvider().getUser(notification.idUserGuest) as UserInformation;
+      UserInformation userGuest = UserProvider(firestore: FirebaseFirestore.instance).getUser(notification.idUserGuest) as UserInformation;
 
       Recipe? recipe;
       if(notification.idRecipe != ""){
-        recipe =  await RecipeProvider().getRecipe(notification.idRecipe);
+        recipe =  await RecipeProvider(firestore: FirebaseFirestore.instance).getRecipe(notification.idRecipe);
       }
 
 

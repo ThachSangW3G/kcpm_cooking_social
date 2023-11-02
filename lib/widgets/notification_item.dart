@@ -1,4 +1,5 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kcpm/models/user.dart';
@@ -36,9 +37,9 @@ class _NotificationItemState extends State<NotificationItem> {
   @override
   Future<void> initState() async {
     super.initState();
-    userInformationOwner = await UserProvider().getUserFuture(widget.userOwner);
-    userInformationGuest = await UserProvider().getUserFuture(widget.userGuest);
-    recipe = await RecipeProvider().getRecipe(widget.idRecipe);
+    userInformationOwner = await UserProvider(firestore: FirebaseFirestore.instance).getUserFuture(widget.userOwner);
+    userInformationGuest = await UserProvider(firestore: FirebaseFirestore.instance).getUserFuture(widget.userGuest);
+    recipe = await RecipeProvider(firestore: FirebaseFirestore.instance).getRecipe(widget.idRecipe);
   }
 
   @override

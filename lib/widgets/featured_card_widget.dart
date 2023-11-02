@@ -127,7 +127,7 @@ class FeaturedCard extends StatelessWidget {
                             ),
                             const SizedBox(width: 10.0,),
                             Text(
-                              recipe.numberReView.toString(),
+                              recipe.numberReview.toString(),
                               style: const TextStyle(
                                   fontFamily: 'CeraPro',
                                   fontSize: 14,

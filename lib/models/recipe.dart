@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
+
 class Recipe {
-  String key;
+  String id;
   String url;
   String name;
   int cookTime;
@@ -9,14 +11,14 @@ class Recipe {
   List<String> material;
   int numberLike;
   String category;
-  int numberReView;
+  int numberReview;
   int serves;
   String source;
   List<String> spice;
   List<String> steps;
   String uidUser;
   Recipe(
-      {required this.key,
+      {required this.id,
         required this.url,
         required this.name,
         required this.cookTime,
@@ -26,16 +28,30 @@ class Recipe {
         required this.material,
         required this.category,
         required this.numberLike,
-        required this.numberReView,
+        required this.numberReview,
         required this.serves,
         required this.source,
         required this.spice,
         required this.steps,
         required this.uidUser});
 
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is Recipe &&
+              runtimeType == other.runtimeType &&
+              id == other.id &&
+              url == other.url && name == other.name && cookTime == other.cookTime && description == other.description && difficult == other.difficult &&
+              isPublic == other.isPublic && listEquals(material, other.material) && category == other.category && numberLike == other.numberLike && numberReview == other.numberReview &&
+              serves == other.serves && source == other.source && listEquals(spice, other.spice) && listEquals(steps, other.steps) && uidUser == other.uidUser;
+
+  @override
+  int get hashCode => id.hashCode;
+
   factory Recipe.fromJson(Map<String, dynamic> json) {
     return Recipe(
-        key: json['id'] as String,
+        id: json['id'] as String,
         url: json['URL'] as String,
         name: json['name'] as String,
         cookTime: json['cookTime'] as int,
@@ -44,7 +60,7 @@ class Recipe {
         isPublic: json['isPublic'] as bool,
         material: List<String>.from(json['material']),
         numberLike: json['numberLike'] as int,
-        numberReView: json['numberReview'] as int,
+        numberReview: json['numberReview'] as int,
         serves: json['serves'] as int,
         source: json['source'] as String,
         category: json['category'] as String,
@@ -54,7 +70,7 @@ class Recipe {
   }
   Map<String, dynamic> toJson() {
     return {
-      'key': key,
+      'id': id,
       'URL': url,
       'name': name,
       'cookTime': cookTime,
@@ -63,7 +79,7 @@ class Recipe {
       'isPublic': isPublic,
       'material': material,
       'numberLike': numberLike,
-      'numberReView': numberReView,
+      'numberReview': numberReview,
       'category': category,
       'serves': serves,
       'source': source,
