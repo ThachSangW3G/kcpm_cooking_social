@@ -1,5 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kcpm/providers/grocery_provider.dart';
@@ -48,7 +49,7 @@ class _GroceryScreenState extends State<GroceryScreen> {
 
               if(delete == null) return;
               if(delete == true){
-                await GroceryProvider().deleteGrocery();
+                await GroceryProvider(firestore: FirebaseFirestore.instance).deleteGrocery(FirebaseAuth.instance.currentUser!.uid);
               }
 
 
@@ -108,7 +109,7 @@ class _GroceryScreenState extends State<GroceryScreen> {
               // ),
               const SizedBox(height: 20.0,),
               FutureBuilder<List<Grocery>>(
-                  future: GroceryProvider().getListGroceries(),
+                  future: GroceryProvider(firestore: FirebaseFirestore.instance).getListGroceries(FirebaseAuth.instance.currentUser!.uid),
                   builder: (context, snapshot){
                     if(snapshot.connectionState == ConnectionState.waiting){
                       return const Center(

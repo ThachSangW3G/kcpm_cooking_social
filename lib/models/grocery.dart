@@ -1,5 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 class Grocery {
   String key;
@@ -14,6 +15,20 @@ class Grocery {
         required this.ingredients,
         required this.recipeId,
         required this.uidUser});
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is Grocery &&
+              runtimeType == other.runtimeType &&
+              key == other.key &&
+              date == other.date &&
+              recipeId == other.recipeId && uidUser == other.uidUser && listEquals(ingredients, other.ingredients);
+
+  @override
+  int get hashCode => key.hashCode;
+
+
 
   factory Grocery.fromJson(Map<String, dynamic> json) {
     return Grocery(

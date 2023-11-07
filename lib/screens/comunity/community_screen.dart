@@ -219,7 +219,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
                                   final userInformation = snapshot.data;
 
                                   return FutureBuilder<LikeModel>(
-                                    future: LikeProvider().likeExists(recipe.id, user.uid),
+                                    future: LikeProvider(firestore: FirebaseFirestore.instance).likeExists(recipe.id, user.uid),
                                     builder: (context, snapshot){
 
                                       final LikeModel? liked = snapshot.data;
@@ -232,11 +232,11 @@ class _CommunityScreenState extends State<CommunityScreen> {
                                               idUser: user.uid,
                                               time: Timestamp.now()
                                           );
-                                          await LikeProvider().setDataLike(likeModel);
+                                          await LikeProvider(firestore: FirebaseFirestore.instance).setDataLike(likeModel);
 
-                                          await LikeProvider().updateRecipe(recipe);
+                                          await RecipeProvider(firestore: FirebaseFirestore.instance).increaseNumberLikeRecipe(recipe);
                                         }else {
-                                          await LikeProvider().deleteLike(liked);
+                                          await LikeProvider(firestore: FirebaseFirestore.instance).deleteLike(liked);
                                         }
 
                                       }, liked: liked != null,);

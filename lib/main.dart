@@ -46,7 +46,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => CategoryProvider(firestore: FirebaseFirestore.instance)),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider(firestore: FirebaseFirestore.instance)),
-        ChangeNotifierProvider(create: (_) => LikeProvider()),
+        ChangeNotifierProvider(create: (_) => LikeProvider(firestore: FirebaseFirestore.instance)),
       ],
       child: const MyApp())
   );

@@ -126,6 +126,18 @@ void main(){
 
       });
 
+      test('Test increaseNumberLikeRecipe', () async{
+        final RecipeProvider recipeProvider = RecipeProvider(firestore: fakeFirebaseFirestore!);
+        await fakeFirebaseFirestore!.collection('recipes').doc(recipe.id).set(recipe.toJson());
+
+        await recipeProvider.increaseNumberLikeRecipe(recipe);
+
+        final Recipe actualRecipe = await fakeFirebaseFirestore!.collection('recipes').doc(recipe.id).get().then((DocumentSnapshot doc) => Recipe.fromJson(doc.data() as Map<String, dynamic>));
+
+        expect(actualRecipe.numberLike, recipe.numberLike);
+
+      });
+
     });
   });
 }

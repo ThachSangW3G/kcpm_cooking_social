@@ -154,6 +154,14 @@ class RecipeProvider extends ChangeNotifier{
     return firestore.collection('recipes').snapshots().map(_recipeSortAndFilter);
   }
 
+  Future<void> increaseNumberLikeRecipe(Recipe recipe){
+    recipe.numberLike += 1;
+    return firestore.collection('recipes')
+        .doc(recipe.id)
+        .update(recipe.toJson())
+        .then((value) => print('recipe updated'));
+
+  }
 
 
 }

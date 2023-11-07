@@ -1,4 +1,5 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:kcpm/providers/like_provider.dart';
 
@@ -43,7 +44,7 @@ class _LikedRecipeScreenState extends State<LikedRecipeScreen> {
               preferredSize: Size.fromHeight(16.0), child: LineRow()),
         ),
         body: FutureBuilder<List<Recipe>>(
-          future: LikeProvider().getLikedRecipe(),
+          future: LikeProvider(firestore: FirebaseFirestore.instance).getLikedRecipe(),
           builder: (context, snapshot){
             if(snapshot.connectionState == ConnectionState.waiting){
               return const Center(

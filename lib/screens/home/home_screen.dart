@@ -203,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                       if (snapshot.hasData){
                                         return FutureBuilder<LikeModel>(
-                                            future: LikeProvider().likeExists(recipe.id, FirebaseAuth.instance.currentUser!.uid),
+                                            future: LikeProvider(firestore: FirebaseFirestore.instance).likeExists(recipe.id, FirebaseAuth.instance.currentUser!.uid),
                                             builder: (context, snapshot){
                                               final LikeModel? liked = snapshot.data;
 
@@ -218,9 +218,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         time: Timestamp.now()
                                                     );
 
-                                                    await LikeProvider().setDataLike(likeModel);
+                                                    await LikeProvider(firestore: FirebaseFirestore.instance).setDataLike(likeModel);
 
-                                                    await LikeProvider().updateRecipe(recipe);
+                                                    await RecipeProvider(firestore: FirebaseFirestore.instance).increaseNumberLikeRecipe(recipe);
 
                                                     // NotificationModel notification = NotificationModel(
                                                     //     id: DateTime.now().toIso8601String(),
@@ -236,7 +236,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     // notificationProvider.addNotification(notification);
 
                                                   }else {
-                                                    await LikeProvider().deleteLike(liked);
+                                                    await LikeProvider(firestore: FirebaseFirestore.instance).deleteLike(liked);
                                                   }
 
                                                 }, liked: liked != null,

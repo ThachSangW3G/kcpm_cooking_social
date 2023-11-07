@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kcpm/providers/like_provider.dart';
+import 'package:kcpm/providers/recipe_provider.dart';
 import 'package:kcpm/providers/review_provider.dart';
 import 'package:kcpm/widgets/heart_widget.dart';
 
@@ -102,7 +103,7 @@ class _RecipeSummaryState extends State<RecipeSummary> {
                           ),
                         ),
                         FutureBuilder<LikeModel>(
-                            future: LikeProvider().likeExists(recipe.id, uid!),
+                            future: LikeProvider(firestore: FirebaseFirestore.instance).likeExists(recipe.id, uid!),
                             builder: (context, snapshot) {
                               final LikeModel? liked = snapshot.data;
 
@@ -116,9 +117,9 @@ class _RecipeSummaryState extends State<RecipeSummary> {
                                         time: Timestamp.now()
                                     );
 
-                                    await LikeProvider().setDataLike(likeModel);
+                                    await LikeProvider(firestore: FirebaseFirestore.instance).setDataLike(likeModel);
 
-                                    await LikeProvider().updateRecipe(recipe);
+                                    await RecipeProvider(firestore: FirebaseFirestore.instance).increaseNumberLikeRecipe(recipe);
 
                                     // NotificationModel notification = NotificationModel(
                                     //     id: DateTime.now().toIso8601String(),
@@ -134,7 +135,7 @@ class _RecipeSummaryState extends State<RecipeSummary> {
                                     // notificationProvider.addNotification(notification);
 
                                   }else {
-                                    await LikeProvider().deleteLike(liked);
+                                    await LikeProvider(firestore: FirebaseFirestore.instance).deleteLike(liked);
                                   }
 
                                 }

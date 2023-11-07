@@ -8,6 +8,19 @@ class LikeModel {
 
   LikeModel({required this.id, required this.idUser, required this.idRecipe, required this.time});
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is LikeModel &&
+              runtimeType == other.runtimeType &&
+              id == other.id &&
+              idUser == other.idUser &&
+              idRecipe == other.idRecipe && time == other.time;
+
+  @override
+  int get hashCode => id.hashCode;
+
+
   factory LikeModel.fromJson(Map<String, dynamic> json){
     return LikeModel(
         id: json['id'],

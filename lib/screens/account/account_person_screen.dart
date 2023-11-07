@@ -336,7 +336,7 @@ class _AccountPerSonScreenState extends State<AccountPerSonScreen>
 
                                                   if (snapshot.hasData){
                                                     return FutureBuilder<LikeModel>(
-                                                        future: LikeProvider().likeExists(recipe.id, FirebaseAuth.instance.currentUser!.uid),
+                                                        future: LikeProvider(firestore: FirebaseFirestore.instance).likeExists(recipe.id, FirebaseAuth.instance.currentUser!.uid),
                                                         builder: (context, snapshot){
                                                           final LikeModel? liked = snapshot.data;
 
@@ -351,9 +351,9 @@ class _AccountPerSonScreenState extends State<AccountPerSonScreen>
                                                                     time: Timestamp.now()
                                                                 );
 
-                                                                await LikeProvider().setDataLike(likeModel);
+                                                                await LikeProvider(firestore: FirebaseFirestore.instance).setDataLike(likeModel);
 
-                                                                await LikeProvider().updateRecipe(recipe);
+                                                                await RecipeProvider(firestore: FirebaseFirestore.instance).increaseNumberLikeRecipe(recipe);
 
                                                                 // NotificationModel notification = NotificationModel(
                                                                 //     id: DateTime.now().toIso8601String(),
@@ -369,7 +369,7 @@ class _AccountPerSonScreenState extends State<AccountPerSonScreen>
                                                                 // notificationProvider.addNotification(notification);
 
                                                               }else {
-                                                                await LikeProvider().deleteLike(liked);
+                                                                await LikeProvider(firestore: FirebaseFirestore.instance).deleteLike(liked);
                                                               }
 
                                                             }, liked: liked != null,

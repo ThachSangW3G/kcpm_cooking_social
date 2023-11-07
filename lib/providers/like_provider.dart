@@ -8,11 +8,12 @@ import '../models/recipe.dart';
 
 class LikeProvider extends ChangeNotifier{
 
-  CollectionReference likes = FirebaseFirestore.instance.collection('likes');
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore firestore;
+  LikeProvider({required this.firestore});
+
 
   Future<LikeModel> likeExists(String idRecipe, String idUser) async {
-    return await likes
+    return await firestore.collection('likes')
         .where('idRecipe', isEqualTo: idRecipe)
         .where('idUser', isEqualTo: idUser)
         .limit(1)
@@ -22,7 +23,7 @@ class LikeProvider extends ChangeNotifier{
   }
 
   Future setDataLike(LikeModel likeModel) {
-    return likes.doc(likeModel.id).set(likeModel.toJson()).then((value) => print('like added'));
+    return firestore.collection('likes').doc(likeModel.id).set(likeModel.toJson()).then((value) => print('like added'));
   }
 
   Future<void> deleteLike(LikeModel likeModel) async {
@@ -35,25 +36,17 @@ class LikeProvider extends ChangeNotifier{
     firestore.runTransaction((transaction) async {
       transaction.update(recipeRef, {'numberLike': currentReviewCount - 1});
     });
-    return likes
+    return firestore.collection('likes')
         .doc(likeModel.id)
         .delete()
         .then((value) => print('deleted like'));
   }
 
-  Future<void> updateRecipe(Recipe recipe){
-    recipe.numberLike += 1;
-    return firestore.collection('recipes')
-        .doc(recipe.id)
-        .update(recipe.toJson())
-        .then((value) => print('recipe updated'));
 
-  }
-
-  Future<List<LikeModel>> getLiked() async {
+  Future<List<LikeModel>> getLikedByIdUser(String idUser) async {
     List<LikeModel> listLikedRecipe = [];
-    await likes
-        .where('idUser', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+    await firestore.collection('likes')
+        .where('idUser', isEqualTo: idUser)
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
@@ -66,13 +59,13 @@ class LikeProvider extends ChangeNotifier{
     return Future.value(listLikedRecipe);
   }
 
-  Future<List<Recipe>> getLikedRecipe() async {
-    List<LikeModel> listLikeRecipe = await getLiked();
+  Future<List<Recipe>> getLikedRecipe(String idUser) async {
+    List<LikeModel> listLikeRecipe = await getLikedByIdUser(idUser);
 
     List<Recipe> recipes = [];
 
     for(var liked in listLikeRecipe){
-      Recipe recipe = await RecipeProvider(firestore: FirebaseFirestore.instance).getRecipe(liked.idRecipe);
+      Recipe recipe = await RecipeProvider(firestore: firestore).getRecipe(liked.idRecipe);
 
       recipes.add(recipe);
     }

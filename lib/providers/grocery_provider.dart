@@ -5,17 +5,19 @@ import '../models/grocery.dart';
 
 class GroceryProvider{
 
-  CollectionReference groceries = FirebaseFirestore.instance.collection('groceries');
+  final FirebaseFirestore firestore;
+  GroceryProvider({required this.firestore});
+
 
   Future<void> createGrogery(Grocery grocery) {
-    return groceries.doc(grocery.key).set(grocery.toJson()).then((value) => print('create GROCERY for user!'));
+    return firestore.collection('groceries').doc(grocery.key).set(grocery.toJson()).then((value) => print('create GROCERY for user!'));
   }
 
-  Future<List<Grocery>> getListGroceries() async {
+  Future<List<Grocery>> getListGroceries(String idUser) async {
 
     List<Grocery> list = [];
-    await groceries
-        .where('uidUser', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+    await firestore.collection('groceries')
+        .where('uidUser', isEqualTo: idUser)
         .get().then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((doc) {
         list.add(Grocery.fromJson(doc.data() as Map<String, dynamic>));
@@ -30,11 +32,11 @@ class GroceryProvider{
     return Future.value(list);
   }
 
-  Future<void> deleteGrocery() async {
-    List<Grocery> listGrocery = await getListGroceries();
+  Future<void> deleteGrocery(String idUser) async {
+    List<Grocery> listGrocery = await getListGroceries(idUser);
 
     for(var grocery in listGrocery){
-      groceries.doc(grocery.key).delete().then((value) => print('grocery likecookbook'));
+      firestore.collection('groceries').doc(grocery.key).delete().then((value) => print('grocery likecookbook'));
     }
   }
 
