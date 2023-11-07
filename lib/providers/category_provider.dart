@@ -4,15 +4,18 @@ import 'package:kcpm/models/category.dart';
 
 class CategoryProvider extends ChangeNotifier{
 
-  CollectionReference categories = FirebaseFirestore.instance.collection('categories');
-
+  final FirebaseFirestore firestore;
+  
+  CategoryProvider({required this.firestore}){
+    init();
+  }
+  
+  
+  
   List<Category> _categories = <Category>[];
 
   List<Category> get listCategories => _categories;
-
-  CategoryProvider() {
-    init();
-  }
+  
 
   init() async {
     _categories = await getAllCategories();
@@ -23,7 +26,7 @@ class CategoryProvider extends ChangeNotifier{
   Future<List<Category>> getAllCategories() async {
     List<Category> listCategory = [];
 
-    await categories.get().then((QuerySnapshot querySnapshot){
+    await firestore.collection('categories').get().then((QuerySnapshot querySnapshot){
       querySnapshot.docs.forEach((doc){
         listCategory.add(Category.fromJson(doc.data() as Map<String, dynamic>));
       });
@@ -38,7 +41,7 @@ class CategoryProvider extends ChangeNotifier{
 
 
   Stream<List<Category>> getCategories() {
-    return categories.snapshots().map(_recipeListFromSnapshot);
+    return firestore.collection('categories').snapshots().map(_recipeListFromSnapshot);
   }
 
 }

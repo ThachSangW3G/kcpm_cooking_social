@@ -1,4 +1,5 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -67,7 +68,7 @@ class _CalendarWithRecipeViewState extends State<CalendarWithRecipeView> {
           Container(
               height: 300,
               child: FutureBuilder<List<RecipeCalendar>>(
-                  future: calendarProvider.getRecipeCalendar(calendarProvider.dateSelected),
+                  future: calendarProvider.getRecipeCalendar(calendarProvider.dateSelected, FirebaseAuth.instance.currentUser!.uid),
                   builder: (context, snapshot){
                     print(calendarProvider.dateSelected);
 

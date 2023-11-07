@@ -6,16 +6,20 @@ import '../models/follow_model.dart';
 
 class FollowProvider{
 
-  CollectionReference follows = FirebaseFirestore.instance.collection('follows');
+  final FirebaseFirestore firestore;
+
+  FollowProvider({required this.firestore});
+
+
 
 
   Future<void> addFollow(FollowModel followModel) {
-    return follows.doc(followModel.id).set(followModel.toJson()).then((value) => print('follow added'));
+    return firestore.collection('follows').doc(followModel.id).set(followModel.toJson()).then((value) => print('follow added'));
   }
 
 
   Future<FollowModel> followExist(String idUserOwner, String idUserFollower) async {
-    return await follows
+    return await firestore.collection('follows')
         .where('idUserOwner', isEqualTo: idUserOwner)
         .where('idUserFollower', isEqualTo: idUserFollower)
         .limit(1)
@@ -43,13 +47,12 @@ class FollowProvider{
   // }
 
   Future<void> deleteFollow(FollowModel followModel) {
-    return follows.doc(followModel.id).delete().then((value) => print('deleted follow'));
+    return firestore.collection('follows').doc(followModel.id).delete().then((value) => print('deleted follow'));
   }
 
   Stream<int> getFollower(String idUser) {
     StreamController<int> controller = StreamController<int>();
-
-    follows
+    firestore.collection('follows')
         .where('idUserOwner', isEqualTo: idUser)
         .snapshots()
         .listen((QuerySnapshot querySnapshot) {
@@ -64,7 +67,7 @@ class FollowProvider{
   Stream<int> getFollowing(String idUser){
     StreamController<int> controller = StreamController<int>();
 
-    follows
+    firestore.collection('follows')
         .where('idUserFollower', isEqualTo: idUser)
         .snapshots()
         .listen((QuerySnapshot querySnapshot) {

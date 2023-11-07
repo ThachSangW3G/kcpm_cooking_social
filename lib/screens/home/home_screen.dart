@@ -308,7 +308,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Container(
                       height: 130,
                       child: StreamBuilder<List<Category>>(
-                        stream: CategoryProvider().getCategories(),
+                        stream: CategoryProvider(firestore: FirebaseFirestore.instance).getCategories(),
                         builder: (context, snapshot) {
 
                           if (snapshot.connectionState == ConnectionState.waiting){

@@ -5,12 +5,15 @@ import 'package:flutter/cupertino.dart';
 import '../models/recipe_calendar.dart';
 
 class CalendarProvider extends ChangeNotifier{
-  CollectionReference calendars = FirebaseFirestore.instance.collection('calendars');
+
+  final FirebaseFirestore firestore;
+
+  CalendarProvider({required this.firestore});
 
   DateTime dateSelected = DateTime.now();
 
   addRecipeCalendar(RecipeCalendar recipeCalendar) async {
-    await calendars.doc(recipeCalendar.id).set(recipeCalendar.toJson()).then((value) => print('calendar add'));
+    await firestore.collection('calendars').doc(recipeCalendar.id).set(recipeCalendar.toJson()).then((value) => print('calendar add'));
     notifyListeners();
   }
 
@@ -19,15 +22,15 @@ class CalendarProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  Future<List<RecipeCalendar>> getRecipeCalendar(DateTime date) async {
+  Future<List<RecipeCalendar>> getRecipeCalendar(DateTime date, String idUser) async {
     final startDate = DateTime(date.year, date.month, date.day);
     final endDate = DateTime(date.year, date.month, date.day + 1);
 
     List<RecipeCalendar> list = [];
     print(list);
 
-    await calendars
-        .where('idUser', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+    await firestore.collection('calendars')
+        .where('idUser', isEqualTo: idUser)
         .where('date', isGreaterThanOrEqualTo: startDate)
         .where('date', isLessThan: endDate)
         .get().then((QuerySnapshot querySnapshot) {
@@ -44,13 +47,13 @@ class CalendarProvider extends ChangeNotifier{
   }
 
   Future<void> deleteRecipeCalendar(RecipeCalendar recipeCalendar) async {
-    await calendars.doc(recipeCalendar.id).delete().then((value) => print('deleted calendar'));
+    await firestore.collection('calendars').doc(recipeCalendar.id).delete().then((value) => print('deleted calendar'));
 
     notifyListeners();
   }
 
   Future<void> updateRecipeCalendar(RecipeCalendar recipeCalendar) async {
-    await calendars
+    await firestore.collection('calendars')
         .doc(recipeCalendar.id)
         .update(recipeCalendar.toJson())
         .then((value) => print('recipeCalendar updated'));

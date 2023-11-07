@@ -113,7 +113,7 @@ class _AccountPerSonScreenState extends State<AccountPerSonScreen>
                             ),
                           ),
                           FutureBuilder<FollowModel>(
-                              future: FollowProvider().followExist(
+                              future: FollowProvider(firestore: FirebaseFirestore.instance).followExist(
                                   userInformation!.uid, user.uid),
                               builder: (context, snapshot) {
                                 final FollowModel? existFollow = snapshot.data;
@@ -130,7 +130,7 @@ class _AccountPerSonScreenState extends State<AccountPerSonScreen>
                                                 .toIso8601String(),
                                             idUserOwner: userInformation!.uid,
                                             idUserFollower: user.uid);
-                                        await FollowProvider().addFollow(follow);
+                                        await FollowProvider(firestore: FirebaseFirestore.instance).addFollow(follow);
 
                                         // NotificationModel notification =
                                         // NotificationModel(
@@ -148,7 +148,7 @@ class _AccountPerSonScreenState extends State<AccountPerSonScreen>
                                         //     .addNotification(notification);
                                       } else {
                                         print(existFollow.id);
-                                        await FollowProvider()
+                                        await FollowProvider(firestore: FirebaseFirestore.instance)
                                             .deleteFollow(existFollow);
                                       }
                                     }
@@ -229,7 +229,7 @@ class _AccountPerSonScreenState extends State<AccountPerSonScreen>
                                           MainAxisAlignment.center,
                                           children: [
                                             StreamBuilder<int>(
-                                                stream: FollowProvider()
+                                                stream: FollowProvider(firestore: FirebaseFirestore.instance)
                                                     .getFollower(userInformation.uid),
                                                 builder: (context, snapshot) {
                                                   if (snapshot
@@ -265,7 +265,7 @@ class _AccountPerSonScreenState extends State<AccountPerSonScreen>
                                             ),
                                             StreamBuilder<int>(
                                                 stream:
-                                                FollowProvider().getFollowing(
+                                                FollowProvider(firestore: FirebaseFirestore.instance).getFollowing(
                                                     userInformation.uid),
                                                 builder: (context, snapshot) {
                                                   if (snapshot

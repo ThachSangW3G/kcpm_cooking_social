@@ -12,7 +12,31 @@ class Category{
         name: json['name']
     );
   }
+
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is Category &&
+              runtimeType == other.runtimeType &&
+              id == other.id &&
+              image == other.image &&
+              name == other.name;
+
+  @override
+  int get hashCode => id.hashCode;
+
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'image': image,
+      'name': name,
+    };
+  }
 }
+
+
 
 List<Category> listCategory = [
   Category(id: '1', image: 'assets/images/background_1.jpg', name: 'Seasonal'),
