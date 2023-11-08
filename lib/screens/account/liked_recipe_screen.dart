@@ -1,5 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kcpm/providers/like_provider.dart';
 
@@ -44,7 +45,7 @@ class _LikedRecipeScreenState extends State<LikedRecipeScreen> {
               preferredSize: Size.fromHeight(16.0), child: LineRow()),
         ),
         body: FutureBuilder<List<Recipe>>(
-          future: LikeProvider(firestore: FirebaseFirestore.instance).getLikedRecipe(),
+          future: LikeProvider(firestore: FirebaseFirestore.instance).getLikedRecipe(FirebaseAuth.instance.currentUser!.uid),
           builder: (context, snapshot){
             if(snapshot.connectionState == ConnectionState.waiting){
               return const Center(

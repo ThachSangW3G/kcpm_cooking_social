@@ -14,6 +14,20 @@ class NotificationModel{
   NotificationModel( {required this.id, required this.idUserOwner, required this.idUserGuest, required this.type,
     required this.title, required this.time, required this.read, required this.idRecipe,});
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is NotificationModel &&
+              runtimeType == other.runtimeType &&
+              id == other.id &&
+              idUserOwner == other.idUserOwner &&
+              idUserGuest == other.idUserGuest && time == other.time && type == other.type && title == other.title
+              && read == other.read && idRecipe == other.idRecipe
+  ;
+
+  @override
+  int get hashCode => id.hashCode;
+
   factory NotificationModel.fromJson(Map<String, dynamic> json){
     return NotificationModel(
         id: json['id'] ?? "",

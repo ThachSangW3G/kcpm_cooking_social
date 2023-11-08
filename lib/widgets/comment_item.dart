@@ -100,7 +100,7 @@ class _CommentItemState extends State<CommentItem> {
                                 idUser: uid,
                                 idReview: review!.key,
                                 time: Timestamp.now());
-                            reviewLikeProvider.addLike(likeReview);
+                            reviewLikeProvider.addLikeReview(likeReview);
                             Provider.of<ReviewProvider>(context,
                                 listen: false)
                                 .updatePropertyById(review!.key, 'check', true);

@@ -12,6 +12,19 @@ class LikeReview {
         required this.idReview,
         required this.time});
 
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is LikeReview &&
+              runtimeType == other.runtimeType &&
+              id == other.id &&
+              idUser == other.idUser &&
+              idReview == other.idReview && time == other.time;
+
+  @override
+  int get hashCode => id.hashCode;
+
   factory LikeReview.fromJson(Map<String, dynamic> json) {
     return LikeReview(
         id: json['id'],

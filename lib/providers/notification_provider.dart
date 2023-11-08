@@ -9,13 +9,17 @@ import '../models/recipe.dart';
 
 class NotificationProvider{
 
-  CollectionReference notifications = FirebaseFirestore.instance.collection('notifications');
+  final FirebaseFirestore firestore;
+
+  NotificationProvider({required this.firestore});
+
+  //CollectionReference notifications = FirebaseFirestore.instance.collection('notifications');
 
 
-  Future<List<NotificationModel>> getListNotification() async {
+  Future<List<NotificationModel>> getListNotification(String idUser) async {
     List<NotificationModel> notificationList = [];
-    await notifications
-        .where('idUserOwner', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+    await firestore.collection('notifications')
+        .where('idUserOwner', isEqualTo: idUser)
         .get().then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
         notificationList.add(NotificationModel.fromJson(doc.data() as Map<String, dynamic>));
@@ -28,11 +32,11 @@ class NotificationProvider{
     return Future.value(notificationList);
   }
 
-  Future<void> deleteNotification() async {
-    List<NotificationModel> listNotification = await getListNotification();
+  Future<void> deleteNotification(String idUser) async {
+    List<NotificationModel> listNotification = await getListNotification(idUser);
 
     for(var notification in listNotification){
-      notifications.doc(notification.id).delete().then((value) => print('notification likecookbook'));
+      firestore.collection('notifications').doc(notification.id).delete().then((value) => print('notification likecookbook'));
     }
 
   }
@@ -43,18 +47,18 @@ class NotificationProvider{
 
 
   Stream<List<NotificationModel>> getNotificationStream() {
-    return notifications
+    return firestore.collection('notifications')
         .where('idUserOwner', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .snapshots()
         .map((snapshot) => _notificationFromSnapshot(snapshot));
   }
 
 
-  Future<List<Map<String, dynamic>>> getListNotificationMapString() async {
+  Future<List<Map<String, dynamic>>> getListNotificationMapString(String idUser) async {
 
     List<Map<String, dynamic>> data = [];
 
-    List<NotificationModel> notifications = await getListNotification();
+    List<NotificationModel> notifications = await getListNotification(idUser);
 
 
     notifications.sort((b, a) => a.time.compareTo(b.time));
@@ -62,13 +66,13 @@ class NotificationProvider{
     for(var notification in notifications){
 
       UserInformation userOwner =
-      UserProvider(firestore: FirebaseFirestore.instance).getUser(notification.idUserOwner) as UserInformation ;
+      UserProvider(firestore: firestore).getUser(notification.idUserOwner) as UserInformation;
 
-      UserInformation userGuest = UserProvider(firestore: FirebaseFirestore.instance).getUser(notification.idUserGuest) as UserInformation;
+      UserInformation userGuest = UserProvider(firestore: firestore).getUser(notification.idUserGuest) as UserInformation;
 
       Recipe? recipe;
       if(notification.idRecipe != ""){
-        recipe =  await RecipeProvider(firestore: FirebaseFirestore.instance).getRecipe(notification.idRecipe);
+        recipe =  await RecipeProvider(firestore: firestore).getRecipe(notification.idRecipe);
       }
 
 
@@ -90,16 +94,15 @@ class NotificationProvider{
   }
 
   Future<void> updateNotification(NotificationModel notificationModel) {
-    return notifications
+    return firestore.collection('notifications')
         .doc(notificationModel.id)
         .update(notificationModel.toJson())
         .then((value) => print('notification updated'));
   }
 
 
-  Future<void> markAllRead() async {
-    print('Sang');
-    final listNotification = await getListNotification();
+  Future<void> markAllRead(String idUser) async {
+    final listNotification = await getListNotification(idUser);
     for(var notification in listNotification){
       notification.read = true;
 

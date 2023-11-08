@@ -1,5 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kcpm/providers/notification_provider.dart';
 
@@ -48,7 +49,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             margin: const EdgeInsets.only(right: 15),
             child: GestureDetector(
               onTap: () async {
-                await NotificationProvider().deleteNotification();
+                await NotificationProvider(firestore: FirebaseFirestore.instance).deleteNotification(FirebaseAuth.instance.currentUser!.uid);
 
               },
               child: const Text(
@@ -66,7 +67,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             preferredSize: Size.fromHeight(16.0), child: LineRow()),
       ),
       body: StreamBuilder<List<NotificationModel>>(
-          stream: NotificationProvider().getNotificationStream(),
+          stream: NotificationProvider(firestore: FirebaseFirestore.instance).getNotificationStream(),
           builder: (context, snapshot){
 
             if(snapshot.connectionState == ConnectionState.waiting){
@@ -100,7 +101,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
                         dataNotification.read = true;
 
-                        NotificationProvider().updateNotification(dataNotification);
+                        NotificationProvider(firestore: FirebaseFirestore.instance).updateNotification(dataNotification);
 
                         if(dataNotification.type == 'liked'){
                           Navigator.of(context).pushNamed(
@@ -143,7 +144,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(backgroundColor: AppColors.appYellow),
           onPressed: () {
-            NotificationProvider().markAllRead();
+            NotificationProvider(firestore: FirebaseFirestore.instance).markAllRead(FirebaseAuth.instance.currentUser!.uid);
             print('Sang');
           },
           child: const Center(

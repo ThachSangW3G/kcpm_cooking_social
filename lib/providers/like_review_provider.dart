@@ -4,20 +4,22 @@ import 'package:flutter/cupertino.dart';
 import '../models/like_review.dart';
 
 class LikeReviewProvider extends ChangeNotifier {
-  CollectionReference likes =
-  FirebaseFirestore.instance.collection('reviewlike');
+
+  final FirebaseFirestore firestore;
+
+  LikeReviewProvider({required this.firestore});
 
 
-  Future<void> addLike(LikeReview likeModel) async {
-    await likes
-        .doc(likeModel.id)
-        .set(likeModel.toJson())
+  Future<void> addLikeReview(LikeReview likeReview) async {
+    await firestore.collection('likeReviews')
+        .doc(likeReview.id)
+        .set(likeReview.toJson())
         .then((value) => print('liked add'));
     notifyListeners();
   }
 
   Future<LikeReview> likeExist(String idReview, String idUser) async {
-    return await likes
+    return await firestore.collection('likeReviews')
         .where('idReview', isEqualTo: idReview)
         .where('idUser', isEqualTo: idUser)
         .limit(1)
@@ -27,7 +29,7 @@ class LikeReviewProvider extends ChangeNotifier {
   }
 
   Future<void> deleteLike(LikeReview likeModel) async {
-    await likes
+    await firestore.collection('likeReviews')
         .doc(likeModel.id)
         .delete()
         .then((value) => print('deleted like'));
