@@ -1,49 +1,60 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Review {
-  String key;
+  String id;
   String uidUser;
-  String name;
-  String avatar;
   String description;
-  String time;
-  String keyRecipe;
-  bool check;
+  Timestamp time;
+  String idRecipe;
+
 
   Review(
       {required this.uidUser,
         required this.description,
-        required this.key,
-        required this.avatar,
-        required this.name,
+        required this.id,
+
+
         required this.time,
-        required this.keyRecipe,
-        required this.check});
+        required this.idRecipe,
+     });
+
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is Review &&
+              runtimeType == other.runtimeType &&
+              id == other.id &&
+              uidUser == other.uidUser &&
+            time == other.time && description == other.description && idRecipe == other.idRecipe;
+
+  @override
+  int get hashCode => id.hashCode;
+
 
   Map<String, dynamic> toJson() {
     return {
-      'key': key,
+      'id': id,
       'uidUser': uidUser,
       'description': description,
       'time': time,
-      'keyRecipe': keyRecipe,
+      'idRecipe': idRecipe,
     };
   }
 
-  void setProperty(String propertyName, dynamic propertyValue) {
-    if (propertyName == 'check') {
-      check = propertyValue;
-    }
-    // Thêm các trường hợp xử lý cho các thuộc tính khác (nếu có)
-  }
+  // void setProperty(String propertyName, dynamic propertyValue) {
+  //   if (propertyName == 'check') {
+  //     check = propertyValue;
+  //   }
+  //   // Thêm các trường hợp xử lý cho các thuộc tính khác (nếu có)
+  // }
 
   factory Review.fromJson(Map<String, dynamic> json) {
     return Review(
-        key: json['key'],
+        id: json['id'],
         uidUser: json['uidUser'],
         description: json['description'],
         time: json['time'],
-        keyRecipe: json['keyRecipe'],
-        avatar: json['avatar'],
-        name: json['name'],
-        check: json['check']);
+        idRecipe: json['idRecipe']);
   }
 }

@@ -350,8 +350,8 @@ class _RecipeSummaryState extends State<RecipeSummary> {
                                     height: 10,
                                   ),
                                   FutureBuilder<List<Review>>(
-                                      future: ReviewProvider()
-                                          .fetchReview(recipe.id),
+                                      future: ReviewProvider(firestore: FirebaseFirestore.instance)
+                                          .getReviewsByRecipe(recipe.id),
                                       builder: (context, snapshotReview) {
                                         try {
                                           if (snapshotReview.hasError) {

@@ -35,7 +35,7 @@ Future<void> main() async {
   );
   runApp(MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => ReviewProvider()),
+        ChangeNotifierProvider(create: (_) => ReviewProvider(firestore: FirebaseFirestore.instance)),
         ChangeNotifierProvider(create: (_) => LikeReviewProvider(firestore: FirebaseFirestore.instance)),
         ChangeNotifierProvider(create: (_) => CalendarProvider(firestore:  FirebaseFirestore.instance)),
         ChangeNotifierProvider(create: (_) => RecipeProvider(firestore: FirebaseFirestore.instance)),

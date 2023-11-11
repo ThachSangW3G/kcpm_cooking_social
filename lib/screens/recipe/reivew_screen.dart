@@ -1,5 +1,9 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:kcpm/models/user.dart';
+import 'package:kcpm/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/app_colors.dart';
@@ -75,7 +79,7 @@ class _ReViewScreenState extends State<ReViewScreen> {
         body: Stack(
           children: [
             FutureBuilder<List<Review>>(
-              future: reviewProvider.fetchReview(keyRecipe!),
+              future: reviewProvider.getReviewsByRecipe(keyRecipe!),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   // Hiển thị widget khi có lỗi xảy ra
@@ -96,7 +100,19 @@ class _ReViewScreenState extends State<ReViewScreen> {
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: listReview.length,
                       itemBuilder: (context, index) {
-                        return CommentItem(review: listReview[index]);
+                        return FutureBuilder<UserInformation>(
+                          future: UserProvider(firestore: FirebaseFirestore.instance).getUserFuture(listReview[index].uidUser),
+                          builder: (context, snapshot){
+                            if(snapshot.connectionState == ConnectionState.waiting){
+                              return const CircularProgressIndicator();
+                            }
+                            else {
+                              final user = snapshot.data;
+                              return CommentItem(review: listReview[index], user: user!,);
+                            }
+
+                          },
+                        );
                       },
                     ),
                   );
@@ -144,7 +160,15 @@ class _ReViewScreenState extends State<ReViewScreen> {
                       GestureDetector(
                         onTap: () async {
                           if (_description != null) {
-                            reviewProvider.addReview(_description!, keyRecipe!);
+
+                            final Review review = Review(
+                                uidUser: FirebaseAuth.instance.currentUser!.uid,
+                                description: _description!,
+                                id: DateTime.now().toIso8601String(),
+                                time: Timestamp.now(),
+                                idRecipe: keyRecipe!);
+
+                            reviewProvider.addReview(review);
                             _textEditingController.clear();
 
                             // NotificationModel notification = NotificationModel(
